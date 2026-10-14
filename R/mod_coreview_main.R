@@ -66,7 +66,7 @@ body { padding-bottom: 60px; }
   border: 2px dashed #ddd; border-radius: 8px; margin-top: 40px;
 }
 .review-box { transition: background-color .15s, border-color .15s, box-shadow .15s; }
-.review-box.changed {
+textarea.changed {
   border: 2px solid #c0392b !important;
   background-color: #fdecea !important;
   box-shadow: 0 0 0 1px #c0392b33;
@@ -125,10 +125,25 @@ function refreshChanged(el) {
   }
 }
 document.addEventListener('input', function(e) {
-  if (e.target && e.target.classList && e.target.classList.contains('review-box')) refreshChanged(e.target);
+
+  if (
+    e.target &&
+    e.target.tagName === 'TEXTAREA'
+  ) {
+    refreshChanged(e.target);
+  }
+
 });
+
 document.addEventListener('change', function(e) {
-  if (e.target && e.target.classList && e.target.classList.contains('review-box')) refreshChanged(e.target);
+
+  if (
+    e.target &&
+    e.target.tagName === 'TEXTAREA'
+  ) {
+    refreshChanged(e.target);
+  }
+
 });
 if (typeof Shiny !== 'undefined') {
   // setAiBaseline can arrive before two things are true: (a) on the very
@@ -566,6 +581,15 @@ mod_coreview_main_server <- function(
           rec
         )
         
+        paper_statuses(
+          vapply(
+            paper_ids(),
+            function(p) paper_status(batch_dir(), p),
+            character(1)
+          )
+        )
+        
+        
         rv_record(rec)
         
       }
@@ -714,15 +738,17 @@ mod_coreview_main_server <- function(
             EXTRACTION_FIELDS,
             function(f) {
               
-              textAreaInput(
-                inputId = session$ns(
-                  paste0("ext_", f)
+              tagAppendAttributes(
+                
+                textAreaInput(
+                  inputId = session$ns(paste0("ext_", f)),
+                  label = gsub("_", " ", f),
+                  value = current_value(rec$extraction[[f]]) %||% "",
+                  rows = extraction_field_rows(f)
                 ),
-                label = gsub("_", " ", f),
-                value = current_value(
-                  rec$extraction[[f]]
-                ) %||% "",
-                rows = extraction_field_rows(f)
+                
+                class = "review-box"
+                
               )
               
             }
@@ -898,6 +924,37 @@ mod_coreview_main_server <- function(
         ignoreInit = TRUE
       )
 
+      observeEvent(
+        rv_record(),
+        {
+          
+          rec <- rv_record()
+          
+          req(rec)
+          
+          later::later(
+            function() {
+              
+              for (f in EXTRACTION_FIELDS) {
+                
+                session$sendCustomMessage(
+                  "setAiBaseline",
+                  list(
+                    id = session$ns(paste0("ext_", f)),
+                    ai = rec$extraction[[f]]$ai %||% ""
+                  )
+                )
+                
+              }
+              
+            },
+            delay = 0.5
+          )
+          
+        },
+        ignoreInit = TRUE
+      )
+      
       observe({
         
         invalidateLater(2000)
