@@ -160,8 +160,8 @@ split_for_review <- function(extraction, qa, papers_dir, out, manifest = NULL, n
       }
       n_written <- n_written + 1
     }
-    cat(sprintf("batch_%d: %d paper(s) -> %s\n", b, length(batches[[b]]), to_review_dir))
+    cli::cli_alert_success("batch_%d: %d paper(s) -> %s\n", b, length(batches[[b]]), to_review_dir)
   }
-  cat(sprintf("\nWrote %d review record(s) across %d batch(es) under %s\n", n_written, n_batches, out))
+  cli::cli_alert_success("\nWrote %d review record(s) across %d batch(es) under %s\n", n_written, n_batches, out)
   invisible(NULL)
 }

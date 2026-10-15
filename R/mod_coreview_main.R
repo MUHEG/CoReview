@@ -153,21 +153,29 @@ if (typeof Shiny !== 'undefined') {
   // actually landed on that same element -- message send order on the
   // server is not a guarantee of client-side processing order. Retrying
   // on a short timer (rather than comparing immediately) waits out both.
-  Shiny.addCustomMessageHandler('setAiBaseline', function(msg) {
-    var attempts = 0;
-    function apply() {
+  Shiny.addCustomMessageHandler(
+    'setAiBaseline',
+    function(msg) {
+  
       var el = document.getElementById(msg.id);
-      if (!el) { if (++attempts < 40) setTimeout(apply, 25); return; }
-      el.setAttribute('data-ai', msg.ai);
-      // Re-checked a couple more times shortly after: harmless if the value
-      // update already landed (recomputes the same answer), and the safety
-      // net if it lands a beat later than this message.
+  
+      console.log(
+        'setAiBaseline',
+        msg.id,
+        el
+      );
+  
+      if (!el) return;
+  
+      el.setAttribute(
+        'data-ai',
+        msg.ai || ''
+      );
+  
       refreshChanged(el);
-      setTimeout(function() { refreshChanged(el); }, 50);
-      setTimeout(function() { refreshChanged(el); }, 250);
+  
     }
-    setTimeout(apply, 0);
-  });
+  );
 }
 document.addEventListener('DOMContentLoaded', function() {
   var btn = document.getElementById('sidebar_toggle');
@@ -557,11 +565,6 @@ mod_coreview_main_server <- function(
           
           field_id <- paste0("ext_", f)
           
-          print(list(
-            field = field_id,
-            value = input[[field_id]]
-          ))
-          
           rec$extraction[[f]]$reviewed <- input[[field_id]] %||% ""
           
         }
@@ -592,6 +595,56 @@ mod_coreview_main_server <- function(
         
         rv_record(rec)
         
+      }
+      
+      save_qa <- function() {
+        
+        req(batch_dir())
+        req(rv_record())
+        
+        rec <- rv_record()
+        
+        for (sec in QA_SECTIONS) {
+          
+          for (key in names(sec$items)) {
+            
+            verdict_id <- paste0(
+              "qa_verdict_",
+              qa_id(key)
+            )
+            
+            evidence_id <- paste0(
+              "qa_evidence_",
+              qa_id(key)
+            )
+            
+            rec$qa[[key]]$reviewed_verdict <-
+              input[[verdict_id]] %||% ""
+            
+            rec$qa[[key]]$reviewed_evidence <-
+              input[[evidence_id]] %||% ""
+            
+          }
+          
+        }
+        
+        rec$qa_status <- "done"
+        
+        save_record(
+          batch_dir(),
+          rec
+        )
+        
+        paper_statuses(
+          vapply(
+            paper_ids(),
+            function(p)
+              paper_status(batch_dir(), p),
+            character(1)
+          )
+        )
+        
+        rv_record(rec)
       }
    
 
@@ -955,19 +1008,56 @@ mod_coreview_main_server <- function(
         ignoreInit = TRUE
       )
       
-      observe({
-        
-        invalidateLater(2000)
-        
-        print(
-          grep(
-            "^ext_",
-            names(input),
-            value = TRUE
+      observeEvent(
+        rv_record(),
+        {
+          
+          rec <- rv_record()
+          
+          req(rec)
+          
+          later::later(
+            function() {
+              
+              for (sec in QA_SECTIONS) {
+                
+                for (key in names(sec$items)) {
+
+                  cat(
+                    "QA ID:",
+                    session$ns(
+                      paste0(
+                        "qa_evidence_",
+                        qa_id(key)
+                      )
+                    ),
+                    "\n"
+                  )
+                  
+                  session$sendCustomMessage(
+                    "setAiBaseline",
+                    list(
+                      id = session$ns(
+                        paste0(
+                          "qa_evidence_",
+                          qa_id(key)
+                        )
+                      ),
+                      ai = rec$qa[[key]]$ai_evidence %||% ""
+                    )
+                  )
+                  
+                }
+                
+              }
+              
+            },
+            delay = 0.5
           )
-        )
-        
-      })
+          
+        },
+        ignoreInit = TRUE
+      )
       
       # --------------------------------------------------
       # Save Actions
@@ -979,13 +1069,14 @@ mod_coreview_main_server <- function(
           
           save_extraction()
           
-          print(
-            paste(
-              "Saved extraction:",
-              rv_record()$paper_id
-            )
-          )
-          
+        },
+        ignoreInit = TRUE
+      )
+      
+      observeEvent(
+        input$save_qa_btn,
+        {
+          save_qa()
         },
         ignoreInit = TRUE
       )

@@ -69,15 +69,15 @@ combine_reviewed <- function(review_dir, out,
   
   out1 <- file.path(out, ex_name)
   openxlsx::saveWorkbook(build_extraction_workbook(rows$extraction_rows), out1, overwrite = TRUE)
-  cat(sprintf("Wrote %s (%d rows)\n", out1, length(rows$extraction_rows)))
+  cli::cli_alert_success("Wrote %s (%d rows)\n", out1, length(rows$extraction_rows))
   
   out2 <- file.path(out, qa_name)
   openxlsx::saveWorkbook(build_qa_workbook(rows$qa_rows), out2, overwrite = TRUE)
-  cat(sprintf("Wrote %s (%d rows)\n", out2, length(rows$qa_rows)))
+  cli::cli_alert_success("Wrote %s (%d rows)\n", out2, length(rows$qa_rows))
   
   n_pending <- sum(vapply(rows$extraction_rows, function(r) identical(r$status, "pending"), logical(1)))
   n_partial <- sum(vapply(rows$extraction_rows, function(r) identical(r$status, "partial"), logical(1)))
-  if (n_pending > 0) cat(sprintf("\n%d of %d paper(s) were never opened by a reviewer -- status 'pending', AI values only.\n", n_pending, length(rows$extraction_rows)))
-  if (n_partial > 0) cat(sprintf("%d of %d paper(s) have only extraction OR QA done, not both -- status 'partial'.\n", n_partial, length(rows$extraction_rows)))
+  if (n_pending > 0) cli::cli_alert_success("\n%d of %d paper(s) were never opened by a reviewer -- status 'pending', AI values only.\n", n_pending, length(rows$extraction_rows))
+  if (n_partial > 0) cli::cli_alert_success("%d of %d paper(s) have only extraction OR QA done, not both -- status 'partial'.\n", n_partial, length(rows$extraction_rows))
   invisible(NULL)
 }
