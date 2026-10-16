@@ -71,6 +71,12 @@ textarea.changed {
   background-color: #fdecea !important;
   box-shadow: 0 0 0 1px #c0392b33;
 }
+input.changed,
+.selectize-input.changed {
+  border: 2px solid #c0392b !important;
+  background-color: #fdecea !important;
+  box-shadow: 0 0 0 1px #c0392b33;
+}
 .review-field.field-changed > label, .qa-item.field-changed > strong { color: #c0392b; }
 .review-field.field-changed > label::after { content: ' (edited)'; font-weight: normal; font-size: 0.85em; color: #c0392b; }
 .qa-item { border-bottom: 1px solid #eee; padding: 10px 0; }
@@ -111,24 +117,64 @@ textarea.changed {
 # typing in a textarea never loses cursor focus.
 app_js <- "
 function refreshChanged(el) {
+  console.log(
+    'refreshChanged',
+    el.id,
+    el.tagName,
+    el.value
+  );
   var ai = el.getAttribute('data-ai') || '';
   var isChanged = el.value !== ai;
+
   el.classList.toggle('changed', isChanged);
-  var wrap = el.closest('.review-field') || el.closest('.qa-item');
+
+  if (el.tagName === 'SELECT') {
+
+    var selectized =
+      document.getElementById(
+        el.id + '-selectized'
+      );
+
+    if (selectized) {
+      selectized.classList.toggle(
+        'changed',
+        isChanged
+      );
+    }
+  }
+
+  var wrap =
+    el.closest('.review-field') ||
+    el.closest('.qa-item');
+
   if (wrap) {
-    var evidenceEl = wrap.querySelector ? wrap.querySelector('textarea.review-box') : null;
-    var verdictEl = wrap.querySelector ? wrap.querySelector('select.review-box') : null;
-    var anyChanged = (evidenceEl && evidenceEl.classList.contains('changed')) ||
-                      (verdictEl && verdictEl.classList.contains('changed')) ||
-                      isChanged;
-    wrap.classList.toggle('field-changed', anyChanged);
+
+    var evidenceEl =
+      wrap.querySelector('textarea');
+
+    var verdictEl =
+      wrap.querySelector('select');
+
+    var anyChanged =
+      (evidenceEl &&
+        evidenceEl.classList.contains('changed')) ||
+      (verdictEl &&
+        verdictEl.classList.contains('changed'));
+
+    wrap.classList.toggle(
+      'field-changed',
+      anyChanged
+    );
   }
 }
 document.addEventListener('input', function(e) {
 
   if (
     e.target &&
-    e.target.tagName === 'TEXTAREA'
+    (
+      e.target.tagName === 'TEXTAREA' ||
+      e.target.tagName === 'SELECT'
+    )
   ) {
     refreshChanged(e.target);
   }
@@ -139,12 +185,16 @@ document.addEventListener('change', function(e) {
 
   if (
     e.target &&
-    e.target.tagName === 'TEXTAREA'
+    (
+      e.target.tagName === 'TEXTAREA' ||
+      e.target.tagName === 'SELECT'
+    )
   ) {
     refreshChanged(e.target);
   }
 
 });
+
 if (typeof Shiny !== 'undefined') {
   // setAiBaseline can arrive before two things are true: (a) on the very
   // first paper shown, before the field widgets (rendered once via
@@ -1016,23 +1066,18 @@ mod_coreview_main_server <- function(
           
           req(rec)
           
+          print(rec$qa[[1]])
+          
           later::later(
             function() {
               
               for (sec in QA_SECTIONS) {
                 
                 for (key in names(sec$items)) {
-
-                  cat(
-                    "QA ID:",
-                    session$ns(
-                      paste0(
-                        "qa_evidence_",
-                        qa_id(key)
-                      )
-                    ),
-                    "\n"
-                  )
+                  
+                  item <- rec$qa[[key]]
+                  
+                  # Evidence baseline
                   
                   session$sendCustomMessage(
                     "setAiBaseline",
@@ -1043,7 +1088,22 @@ mod_coreview_main_server <- function(
                           qa_id(key)
                         )
                       ),
-                      ai = rec$qa[[key]]$ai_evidence %||% ""
+                      ai = item$ai_evidence %||% ""
+                    )
+                  )
+                  
+                  # Verdict baseline
+                  
+                  session$sendCustomMessage(
+                    "setAiBaseline",
+                    list(
+                      id = session$ns(
+                        paste0(
+                          "qa_verdict_",
+                          qa_id(key)
+                        )
+                      ),
+                      ai = item$ai_verdict %||% ""
                     )
                   )
                   
