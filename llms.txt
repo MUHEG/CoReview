@@ -82,3 +82,8 @@ covr::package_coverage()
 - [`split_for_review()`](https://MUHEG.github.io/CoReview/reference/split_for_review.md)
   : Split AI extraction/QA output into per-reviewer batch folders.
 
+# Articles
+
+### All vignettes
+
+- [CoReview](https://MUHEG.github.io/CoReview/articles/CoReview.md):
