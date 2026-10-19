@@ -38,7 +38,7 @@ This README has been compiled on the
 
 ``` r
 Sys.time()
-#> [1] "2026-10-14 22:15:15 AEDT"
+#> [1] "2026-10-19 14:31:34 AEDT"
 ```
 
 Here are the tests results and package coverage:
@@ -47,7 +47,7 @@ Here are the tests results and package coverage:
 devtools::check(quiet = TRUE)
 #> ℹ Loading CoReview
 #> ── R CMD check results ──────────────────────────────── CoReview 0.0.0.9000 ────
-#> Duration: 1m 8.8s
+#> Duration: 57.3s
 #> 
 #> ❯ checking for future file timestamps ... NOTE
 #>   unable to verify current time
@@ -59,7 +59,7 @@ devtools::check(quiet = TRUE)
 covr::package_coverage()
 #> CoReview Coverage: 81.34%
 #> R/run_app.R: 0.00%
-#> R/mod_CoReview_main.R: 54.55%
+#> R/mod_coreview_main.R: 54.55%
 #> R/combine_reviewed.R: 94.74%
 #> R/combine_logic.R: 95.24%
 #> R/split_for_review.R: 98.82%

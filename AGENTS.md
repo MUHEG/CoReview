@@ -6,7 +6,13 @@ This file provides guidance to coding agent when working with code in this repos
 
 ## Description
 
-<Insert here the description of your application in details>
+CoReview is a work in progress R library that launches a Shiny user
+interface designed for human reviewers who are undertaking AI assisted
+literature reviews of health economic evaluation studies. This
+software has been made publicly available as part of the process for
+testing and documenting the library. It should be regarded as
+experimental and is not currently recommended for use beyond members
+of the development team.
 
 ## Architecture
 
