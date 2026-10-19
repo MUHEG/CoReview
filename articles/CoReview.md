@@ -15,5 +15,3 @@ and its associated app will appear here at a later date.**
 
 run_app()
 ```
-
-Shiny applications not supported in static R Markdown documents
