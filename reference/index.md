@@ -1,6 +1,6 @@
 # Package index
 
-## All functions
+## Functions
 
 - [`combine_reviewed()`](https://MUHEG.github.io/CoReview/reference/combine_reviewed.md)
   : Combine reviewed batches into the final verified deliverables.
