@@ -29,7 +29,7 @@ golem::fill_desc(
 		role = c("aut", "cre", "cph"), # Your role (here author/creator)
 		comment = c(ORCID = "0000-0001-5486-4208")
 	),
-	person(given = "Matthew", family = "Hamilton", 	email = "matthew.hamilton1@monash.edu", role = c("aut"),
+	person(given = "Matthew", family = "Hamilton", 	email = "matthew.hamilton1@monash.edu", role = c("ctb"),
 	       comment = c(ORCID = "0000-0001-7407-9194"))),
 	repo_url = "https://github.com/MUHEG/CoReview", # The URL of the GitHub repo (optional),
 	pkg_version = "0.0.0.9000", # The version of the package containing the app
