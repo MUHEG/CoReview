@@ -25,11 +25,7 @@ to_review_path_for <- function(batch_dir, paper_id) file.path(batch_dir, "input"
 paper_status <- function(batch_dir, paper_id) {
   cp <- completed_path_for(batch_dir, paper_id)
   if (!file.exists(cp)) return("pending")
-  rec <- jsonlite::fromJSON(
-    # src,
-    cp,
-    simplifyVector = FALSE
-  )
+  rec <- jsonlite::fromJSON(cp, simplifyVector = FALSE)
   derive_status(rec$extraction_status %||% "done", rec$qa_status %||% "done")
 }
 

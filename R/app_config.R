@@ -11,7 +11,7 @@
 app_sys <- function(
 	...
 ) {
-  system.file(..., package = "coreview")
+  system.file(..., package = "CoReview")
 }
 
 

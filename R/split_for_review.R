@@ -32,13 +32,21 @@ assign_batches <- function(paper_ids, n_batches) {
   split(paper_ids, cut(seq_along(paper_ids), breaks = n_batches, labels = FALSE))
 }
 
+# A paper missing from qa.xlsx entirely (data error upstream, or a paper
+# that simply has no QA rows yet) would otherwise crash this with a cryptic
+# "subscript out of bounds" on pipelines_present[[1]] -- every per-item
+# lookup in build_record() already degrades gracefully to "Unclear"/"" when
+# nothing matches, so there's nothing wrong with returning NA here too; it
+# just means every QA item for this paper falls back to that default.
 pick_primary_qa_pipeline <- function(pipelines_present) {
   if ("claude" %in% pipelines_present) return("claude")
   if ("qwen3" %in% pipelines_present) return("qwen3")
   if ("local_winner" %in% pipelines_present) return("local_winner")
+  if (length(pipelines_present) == 0) return(NA_character_)
   pipelines_present[[1]]
 }
 
+#' @importFrom stats setNames
 build_record <- function(paper_id, extraction_row, qa_rows, pdf_file, doi = "") {
   extraction <- setNames(
     lapply(EXTRACTION_FIELDS, function(f) {
@@ -81,7 +89,7 @@ build_record <- function(paper_id, extraction_row, qa_rows, pdf_file, doi = "") 
 #'
 #' Reads the AI pipeline's two .xlsx deliverables (extraction + QA) and the
 #' source PDFs, and writes one self-contained batch folder per reviewer,
-#' ready to hand off (see \code{\link{run_review_app}}).
+#' ready to hand off (see \code{\link{run_app}}).
 #'
 #' @param extraction Path to the extraction .xlsx (paper_id, pipeline, one
 #'   column per extraction field, Flags).
@@ -160,8 +168,8 @@ split_for_review <- function(extraction, qa, papers_dir, out, manifest = NULL, n
       }
       n_written <- n_written + 1
     }
-    cli::cli_alert_success("batch_%d: %d paper(s) -> %s\n", b, length(batches[[b]]), to_review_dir)
+    cat(sprintf("batch_%d: %d paper(s) -> %s\n", b, length(batches[[b]]), to_review_dir))
   }
-  cli::cli_alert_success("\nWrote %d review record(s) across %d batch(es) under %s\n", n_written, n_batches, out)
+  cat(sprintf("\nWrote %d review record(s) across %d batch(es) under %s\n", n_written, n_batches, out))
   invisible(NULL)
 }

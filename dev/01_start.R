@@ -19,7 +19,7 @@
 ## to change the name in the app_sys() function in app_config.R /!\
 ##
 golem::fill_desc(
-	pkg_name = "coreview", # The name of the golem package containing the app (typically lowercase, no underscore or periods)
+	pkg_name = "CoReview", # The name of the golem package containing the app (typically lowercase, no underscore or periods)
 	pkg_title = "Streamline Human Checking and Updating of AI Data Extraction and Quality Appraisals for Health Economic Evaluation Literature Reviews", # What the Package Does (One Line, Title Case, No Period)
 	pkg_description = "A work in progress library that launches a Shiny user interface designed for human reviewers who are undertaking AI assisted literature reviews of health economic evaluation studies. This software has been made publicly available as part of the process for testing and documenting the library. It should be regarded as experimental and is not currently recommended for use beyond members of the development team.", # What the package does (one paragraph).
 	authors = c(person(
@@ -31,7 +31,7 @@ golem::fill_desc(
 	),
 	person(given = "Matthew", family = "Hamilton", 	email = "matthew.hamilton1@monash.edu", role = c("aut"),
 	       comment = c(ORCID = "0000-0001-7407-9194"))),
-	repo_url = "https://github.com/MUHEG/coreview", # The URL of the GitHub repo (optional),
+	repo_url = "https://github.com/MUHEG/CoReview", # The URL of the GitHub repo (optional),
 	pkg_version = "0.0.0.9000", # The version of the package containing the app
 	set_options = TRUE # Set the global golem options
 )
@@ -56,7 +56,7 @@ golem::use_recommended_tests()
 
 ## Favicon ----
 # If you want to change the favicon (default is golem's one)
-golem::use_favicon("../../../../../Documentation/Images/coreview-logo/favicon_io/favicon.ico") # path = "path/to/ico". Can be an online file.
+golem::use_favicon("../../../../../Documentation/Images/CoReview-logo/favicon_io/favicon.ico") # path = "path/to/ico". Can be an online file.
 # golem::remove_favicon() # Uncomment to remove the default favicon
 
 ## Add helper functions ----
@@ -68,7 +68,7 @@ golem::use_utils_server(with_test = TRUE)
 # ## Sets the remote associated with 'name' to 'url'
 # usethis::use_git_remote(
 # 	name = "origin",
-# 	url = "https://github.com/MUHEG/coreview.git"
+# 	url = "https://github.com/MUHEG/CoReview.git"
 # )
 
 # You're now set! ----

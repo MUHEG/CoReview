@@ -1,5 +1,5 @@
 default:
-  golem_name: coreview
+  golem_name: CoReview
   golem_version: 0.0.0.9000
   app_prod: no
 production:

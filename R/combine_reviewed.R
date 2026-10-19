@@ -1,6 +1,6 @@
 # Reassembles all reviewer batches' work into the two final, human-verified
 # deliverables. All the actual row-building/red-highlighting logic lives in
-# combine_logic.R, shared with run_review_app()'s in-app "Export batch
+# combine_logic.R, shared with run_app()'s in-app "Export batch
 # output" button, so there's exactly one implementation, not two that could
 # quietly drift apart.
 #
@@ -35,7 +35,7 @@ add_timestamp <- function(filename, ts) sub("(\\.[^.]+)$", paste0("_", ts, "\\1"
 #' @param review_dir Either the parent folder holding all \code{batch_N/}
 #'   folders (the normal, whole-corpus combine), or a single
 #'   \code{batch_N/} folder directly (to combine just one batch -- this is
-#'   also what \code{\link{run_review_app}}'s in-app "Export batch output"
+#'   also what \code{\link{run_app}}'s in-app "Export batch output"
 #'   button does, always timestamped).
 #' @param out Destination folder for the two output files. No default on
 #'   purpose -- see \code{\link{split_for_review}}'s \code{out} parameter
@@ -69,15 +69,15 @@ combine_reviewed <- function(review_dir, out,
   
   out1 <- file.path(out, ex_name)
   openxlsx::saveWorkbook(build_extraction_workbook(rows$extraction_rows), out1, overwrite = TRUE)
-  cli::cli_alert_success("Wrote %s (%d rows)\n", out1, length(rows$extraction_rows))
+  cat(sprintf("Wrote %s (%d rows)\n", out1, length(rows$extraction_rows)))
   
   out2 <- file.path(out, qa_name)
   openxlsx::saveWorkbook(build_qa_workbook(rows$qa_rows), out2, overwrite = TRUE)
-  cli::cli_alert_success("Wrote %s (%d rows)\n", out2, length(rows$qa_rows))
+  cat(sprintf("Wrote %s (%d rows)\n", out2, length(rows$qa_rows)))
   
   n_pending <- sum(vapply(rows$extraction_rows, function(r) identical(r$status, "pending"), logical(1)))
   n_partial <- sum(vapply(rows$extraction_rows, function(r) identical(r$status, "partial"), logical(1)))
-  if (n_pending > 0) cli::cli_alert_success("\n%d of %d paper(s) were never opened by a reviewer -- status 'pending', AI values only.\n", n_pending, length(rows$extraction_rows))
-  if (n_partial > 0) cli::cli_alert_success("%d of %d paper(s) have only extraction OR QA done, not both -- status 'partial'.\n", n_partial, length(rows$extraction_rows))
+  if (n_pending > 0) cat(sprintf("\n%d of %d paper(s) were never opened by a reviewer -- status 'pending', AI values only.\n", n_pending, length(rows$extraction_rows)))
+  if (n_partial > 0) cat(sprintf("%d of %d paper(s) have only extraction OR QA done, not both -- status 'partial'.\n", n_partial, length(rows$extraction_rows)))
   invisible(NULL)
 }

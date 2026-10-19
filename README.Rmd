@@ -13,7 +13,7 @@ output: github_document
 )
 ```
 
-# `{coreview}`
+# `{CoReview}`
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
@@ -21,7 +21,7 @@ output: github_document
 
 ## Installation
 
-You can install the development version of `{coreview}` like so:
+You can install the development version of `{CoReview}` like so:
 
 ```{r eval=FALSE}
 # (Only necessary if the remotes package is not installed).
@@ -29,7 +29,7 @@ utils::install.packages("remotes")
 ```
 
 ```{r eval=FALSE}
-remotes::install_github("MUHEG/coreview")
+remotes::install_github("MUHEG/CoReview")
 ```
 
 ## Run
@@ -37,7 +37,7 @@ remotes::install_github("MUHEG/coreview")
 You can launch the application by running:
 
 ```{r, eval = FALSE}
-coreview::run_app()
+CoReview::run_app()
 ```
 
 ## About
@@ -57,7 +57,7 @@ devtools::check(quiet = TRUE)
 ```
 
 ```{r echo = FALSE}
-unloadNamespace("coreview")
+unloadNamespace("CoReview")
 ```
 
 ```{r, error = TRUE}

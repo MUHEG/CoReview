@@ -16,7 +16,7 @@ combine_reviewed(
 \item{review_dir}{Either the parent folder holding all \code{batch_N/}
 folders (the normal, whole-corpus combine), or a single
 \code{batch_N/} folder directly (to combine just one batch -- this is
-also what \code{\link{run_review_app}}'s in-app "Export batch output"
+also what \code{\link{run_app}}'s in-app "Export batch output"
 button does, always timestamped).}
 
 \item{out}{Destination folder for the two output files. No default on

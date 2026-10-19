@@ -1,10 +1,11 @@
 # Shared core of the "combine reviewed batches into verified .xlsx" logic --
-# used by both combine_reviewed() and run_review_app()'s in-app "Export
+# used by both combine_reviewed() and run_app()'s in-app "Export
 # batch output" button, so there is exactly one implementation of the
 # row-building/red-highlighting logic, not two that could quietly drift
 # apart. Pure functions only: nothing here reads commandArgs, writes to
-# disk, or prints -- callers do that. Internal (non-exported) -- see
-# R/reviewapp-package.R for this package's shared @import/@importFrom tags.
+# disk, or prints -- callers do that. Internal (non-exported) -- each
+# function that needs an external package's function carries its own
+# @importFrom, per AGENTS.md.
 #
 # Batch folder layout:
 #   batch_N/
@@ -16,6 +17,14 @@
 # A timestamp safe to put in a filename (no colons/slashes), used by both
 # the app's export button and the CLI's --timestamp-exports mode.
 export_timestamp <- function() format(Sys.time(), "%Y-%m-%d_%H%M%S")
+
+# The exported deliverables show access type, not the AI pipeline/model
+# name -- "claude"/"qwen3"/"local_winner" (the pilot's older alias for the
+# same local model) are an implementation detail a reviewer or coordinator
+# doesn't need; what matters to them is whether the paper was open-access
+# (routed to claude) or paywalled (routed to a local model, since paywalled
+# papers' terms don't allow sending their content to a commercial/cloud AI).
+access_type_label <- function(pipeline) if (identical(pipeline, "claude")) "open-access" else "paywalled"
 
 derive_status <- function(extraction_status, qa_status) {
   if (identical(extraction_status, "done") && identical(qa_status, "done")) return("completed")
@@ -81,6 +90,7 @@ collect_batches <- function(review_dir) {
 # which regenerates NAMESPACE from these very doc comments -- a
 # chicken-and-egg problem on a fresh build). Cheap enough to just build on
 # every call.
+#' @importFrom openxlsx createStyle
 red_fill <- function() createStyle(fgFill = "#FDECEA", fontColour = "#7A1E1E")
 
 # openxlsx (as of 4.2.8.1) always reserves a drawing/vmlDrawing relationship
@@ -100,6 +110,7 @@ drop_dangling_drawing_rels <- function(wb) {
 # Walks the given batch_dirs (as returned by collect_batches) and returns
 # list(extraction_rows = ..., qa_rows = ...) -- the resolved, per-row data
 # both output workbooks are built from.
+#' @importFrom stats setNames
 build_rows <- function(batch_dirs) {
   extraction_rows <- list()
   qa_rows <- list()
@@ -112,7 +123,7 @@ build_rows <- function(batch_dirs) {
       rec <- resolve_paper(trf, completed_path)
       
       erow <- c(
-        list(paper_id = pid, pipeline = rec$extraction_pipeline %||% "", doi = rec$doi %||% ""),
+        list(paper_id = pid, access_type = access_type_label(rec$extraction_pipeline %||% ""), doi = rec$doi %||% ""),
         setNames(lapply(EXTRACTION_FIELDS, function(f) rec$extraction[[f]]$reviewed %||% rec$extraction[[f]]$ai %||% ""), EXTRACTION_FIELDS),
         list(Flags = rec$extraction_flags %||% "",
              reviewer = rec$reviewer %||% NA_character_,
@@ -130,7 +141,7 @@ build_rows <- function(batch_dirs) {
       # so it's always the AI's own text, but it's kept here alongside the
       # verdict rather than making a reader go back to the original
       # pre-review qa_33items.xlsx to see what the verdict was based on.
-      qrow <- list(paper = pid, pipeline = rec$qa_pipeline %||% "",
+      qrow <- list(paper = pid, access_type = access_type_label(rec$qa_pipeline %||% ""),
                    reviewer = rec$reviewer %||% NA_character_,
                    extraction_status = rec$extraction_status, qa_status = rec$qa_status, status = rec$status,
                    flag_for_discussion = isTRUE(rec$flag_for_discussion), note = rec$note %||% "")
@@ -152,8 +163,9 @@ build_rows <- function(batch_dirs) {
 
 # Returns a ready-to-save openxlsx Workbook (styling + dangling-rel fix
 # already applied) -- never writes to disk itself.
+#' @importFrom openxlsx createWorkbook addWorksheet writeData addStyle setColWidths
 build_extraction_workbook <- function(extraction_rows) {
-  ex_cols <- c("paper_id", "pipeline", "doi", EXTRACTION_FIELDS, "Flags", "reviewer",
+  ex_cols <- c("paper_id", "access_type", "doi", EXTRACTION_FIELDS, "Flags", "reviewer",
                "extraction_status", "qa_status", "status", "flag_for_discussion", "note")
   wb <- createWorkbook()
   addWorksheet(wb, "final_extraction")
@@ -171,9 +183,10 @@ build_extraction_workbook <- function(extraction_rows) {
 
 # One row per paper, one verdict column PLUS one evidence column per
 # sub-item (e.g. "1.1", "1.1_evidence", ..., "10.6", "10.6_evidence").
+#' @importFrom openxlsx createWorkbook addWorksheet writeData addStyle setColWidths
 build_qa_workbook <- function(qa_rows) {
   item_cols <- as.vector(rbind(QA_KEYS, paste0(QA_KEYS, "_evidence")))
-  qa_cols <- c("paper", "pipeline", "reviewer", "extraction_status", "qa_status", "status",
+  qa_cols <- c("paper", "access_type", "reviewer", "extraction_status", "qa_status", "status",
                "flag_for_discussion", "note", item_cols)
   wb <- createWorkbook()
   addWorksheet(wb, "qa_33items")
@@ -184,7 +197,7 @@ build_qa_workbook <- function(qa_rows) {
     if (length(changed_cols)) addStyle(wb, "qa_33items", red_fill(), rows = i + 1, cols = changed_cols, gridExpand = TRUE)
   }
   widths <- rep(10, length(qa_cols))
-  widths[qa_cols %in% c("paper", "pipeline", "reviewer")] <- 16
+  widths[qa_cols %in% c("paper", "access_type", "reviewer")] <- 16
   widths[qa_cols == "note" | grepl("_evidence$", qa_cols)] <- 30
   setColWidths(wb, "qa_33items", cols = seq_along(qa_cols), widths = widths)
   drop_dangling_drawing_rels(wb)

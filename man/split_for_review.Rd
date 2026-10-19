@@ -41,5 +41,5 @@ Invisible; called for its side effect of writing batch_N/ folders
 \description{
 Reads the AI pipeline's two .xlsx deliverables (extraction + QA) and the
 source PDFs, and writes one self-contained batch folder per reviewer,
-ready to hand off (see \code{\link{run_review_app}}).
+ready to hand off (see \code{\link{run_app}}).
 }

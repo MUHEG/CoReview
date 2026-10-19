@@ -10,7 +10,7 @@ app_ui <- function(request) {
 		golem_add_external_resources(),
 		# Your application UI logic
 		fluidPage(
-		  mod_coreview_main_ui("coreview_main_1")
+		  mod_CoReview_main_ui("CoReview_main_1")
 		)
 	)
 }
@@ -33,7 +33,7 @@ golem_add_external_resources <- function() {
 		favicon(),
 		bundle_resources(
 			path = app_sys("app/www"),
-			app_title = "coreview"
+			app_title = "CoReview"
 		)
 		# Add here other external resources
 		# for example, you can add shinyalert::useShinyalert()

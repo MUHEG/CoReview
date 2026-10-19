@@ -1,4 +1,4 @@
-Package: coreview
+Package: CoReview
 Title: Streamline Human Checking and Updating of AI Data Extraction and
     Quality Appraisals for Health Economic Evaluation Literature Reviews
 Version: 0.0.0.9000
@@ -16,16 +16,20 @@ Description: A work in progress library that launches a Shiny user
     experimental and is not currently recommended for use beyond members
     of the development team.
 License: GPL (>= 3)
-URL: https://github.com/MUHEG/coreview
-BugReports: https://github.com/MUHEG/coreview/issues
-Imports: 
+URL: https://github.com/MUHEG/CoReview
+BugReports: https://github.com/MUHEG/CoReview/issues
+Imports:
     config,
     golem,
+    jsonlite,
+    openxlsx,
+    readxl,
     shiny
-Suggests: 
+Suggests:
     htmltools,
     spelling,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-GB

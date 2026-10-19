@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(coreview)
+library(CoReview)
 
-test_check("coreview")
+test_check("CoReview")
