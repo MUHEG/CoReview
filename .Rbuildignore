@@ -9,3 +9,7 @@ $run_dev.*
 ^README\.Rmd$
 ^\.agents$
 ^AGENTS\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
