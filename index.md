@@ -1,0 +1,72 @@
+# `{CoReview}`
+
+## Installation
+
+You can install the development version of
+[CoReview](https://github.com/MUHEG/CoReview) like so:
+
+``` r
+
+# (Only necessary if the remotes package is not installed).
+utils::install.packages("remotes")
+```
+
+``` r
+
+remotes::install_github("MUHEG/CoReview")
+```
+
+## Run
+
+You can launch the application by running:
+
+``` r
+
+CoReview::run_app()
+```
+
+## About
+
+You are reading the doc about version : 0.0.0.9000
+
+This README has been compiled on the
+
+``` r
+
+Sys.time()
+#> [1] "2026-10-19 14:31:34 AEDT"
+```
+
+Here are the tests results and package coverage:
+
+``` r
+
+devtools::check(quiet = TRUE)
+#> ℹ Loading CoReview
+#> ── R CMD check results ──────────────────────────────── CoReview 0.0.0.9000 ────
+#> Duration: 57.3s
+#> 
+#> ❯ checking for future file timestamps ... NOTE
+#>   unable to verify current time
+#> 
+#> 0 errors ✔ | 0 warnings ✔ | 1 note ✖
+```
+
+``` r
+
+covr::package_coverage()
+#> CoReview Coverage: 81.34%
+#> R/run_app.R: 0.00%
+#> R/mod_coreview_main.R: 54.55%
+#> R/combine_reviewed.R: 94.74%
+#> R/combine_logic.R: 95.24%
+#> R/split_for_review.R: 98.82%
+#> R/app_config.R: 100.00%
+#> R/app_server.R: 100.00%
+#> R/app_ui.R: 100.00%
+#> R/extraction_definitions.R: 100.00%
+#> R/golem_utils_server.R: 100.00%
+#> R/golem_utils_ui.R: 100.00%
+#> R/qa_definitions.R: 100.00%
+#> R/review_io.R: 100.00%
+```
