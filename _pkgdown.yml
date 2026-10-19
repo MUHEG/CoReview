@@ -3,3 +3,12 @@ template:
   bootstrap: 5
   bootswatch: journal
 
+home:
+development:
+  mode: auto
+reference:
+- title: "Functions"
+- contents:
+  - combine_reviewed
+  - run_app
+  - split_for_review
