@@ -22,7 +22,7 @@ library(CoReview)
 
 # Launch app
 
-```{r}
+```{r eval=FALSE}
 run_app()
 ```
 
