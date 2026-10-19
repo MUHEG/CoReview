@@ -4,6 +4,9 @@ template:
   bootswatch: journal
 
 home:
+  links:
+  - text: Framework
+    href:  https://ready4-dev.github.io/ready4/
 development:
   mode: auto
 reference:

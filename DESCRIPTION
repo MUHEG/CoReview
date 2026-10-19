@@ -27,6 +27,8 @@ Imports:
     shiny
 Suggests:
     htmltools,
+    knitr,
+    rmarkdown,
     spelling,
     testthat (>= 3.0.0),
     withr
@@ -35,3 +37,4 @@ Encoding: UTF-8
 Language: en-GB
 LazyData: true
 RoxygenNote: 7.3.3
+VignetteBuilder: knitr
