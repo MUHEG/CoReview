@@ -66,7 +66,7 @@ This README has been compiled on the
 ``` r
 
 Sys.time()
-#> [1] "2026-10-20 11:16:50 AEDT"
+#> [1] "2026-10-20 16:20:51 AEDT"
 ```
 
 Here are the tests results and package coverage:
@@ -76,9 +76,16 @@ Here are the tests results and package coverage:
 devtools::check(quiet = TRUE)
 #> ℹ Loading CoReview
 #> ── R CMD check results ──────────────────────────────── CoReview 0.0.0.9000 ────
-#> Duration: 15.9s
+#> Duration: 1m 46.2s
 #> 
-#> 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+#> ❯ checking for future file timestamps ... NOTE
+#>   unable to verify current time
+#> 
+#> ❯ checking top-level files ... NOTE
+#>   Non-standard file/directory found at top level:
+#>     'Citation.cff'
+#> 
+#> 0 errors ✔ | 0 warnings ✔ | 2 notes ✖
 ```
 
 ``` r

@@ -62,6 +62,7 @@
 </div>
 <!-- badges: start -->
 
+<!-- badges: end -->
 <p>A Shiny app for human reviewers checking and correcting AI-generated data extraction and Drummond quality-appraisal results against the original source PDFs, as part of an AI-assisted literature review of health economic evaluation studies. The source PDF and the AI’s extracted data sit side by side, so every field and QA verdict can be checked and corrected at a glance.</p>
 <p>(An AI pipeline’s extraction/QA spreadsheets are split into per-reviewer batches with <code><a href="reference/split_for_review.html">split_for_review()</a></code> before reviewing starts, and combined back into the final verified deliverables with <code><a href="reference/combine_reviewed.html">combine_reviewed()</a></code> once it’s done – see <code><a href="articles/CoReview.html">vignette("CoReview")</a></code> for details.)</p>
 <div class="section level2">
@@ -96,15 +97,22 @@
 <p>This README has been compiled on the</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "2026-10-20 11:16:50 AEDT"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "2026-10-20 16:20:51 AEDT"</span></span></code></pre></div>
 <p>Here are the tests results and package coverage:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span>quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ℹ Loading CoReview</span></span>
 <span><span class="co">#&gt; ── R CMD check results ──────────────────────────────── CoReview 0.0.0.9000 ────</span></span>
-<span><span class="co">#&gt; Duration: 15.9s</span></span>
+<span><span class="co">#&gt; Duration: 1m 46.2s</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; 0 errors ✔ | 0 warnings ✔ | 0 notes ✔</span></span></code></pre></div>
+<span><span class="co">#&gt; ❯ checking for future file timestamps ... NOTE</span></span>
+<span><span class="co">#&gt;   unable to verify current time</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ❯ checking top-level files ... NOTE</span></span>
+<span><span class="co">#&gt;   Non-standard file/directory found at top level:</span></span>
+<span><span class="co">#&gt;     'Citation.cff'</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; 0 errors ✔ | 0 warnings ✔ | 2 notes ✖</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">covr</span><span class="fu">::</span><span class="fu">package_coverage</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; CoReview Coverage: 81.34%</span></span>
@@ -159,6 +167,7 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://doi.org/10.5281/zenodo.23490201" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23490201.svg" alt="DOI"></a></li>
 </ul>
 </div>
 

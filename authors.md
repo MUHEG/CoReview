@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/MUHEG/CoReview/blob/v0.0.0.9/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/MUHEG/CoReview/blob/main/DESCRIPTION)
 
 Wang M (2026). *CoReview: Streamline Human Checking and Updating of AI
 Data Extraction and Quality Appraisals for Health Economic Evaluation
