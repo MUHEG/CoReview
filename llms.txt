@@ -1,5 +1,22 @@
 # `{CoReview}`
 
+A Shiny app for human reviewers checking and correcting AI-generated
+data extraction and Drummond quality-appraisal results against the
+original source PDFs, as part of an AI-assisted literature review of
+health economic evaluation studies. The source PDF and the AI’s
+extracted data sit side by side, so every field and QA verdict can be
+checked and corrected at a glance.
+
+(An AI pipeline’s extraction/QA spreadsheets are split into per-reviewer
+batches with
+[`split_for_review()`](https://MUHEG.github.io/CoReview/reference/split_for_review.md)
+before reviewing starts, and combined back into the final verified
+deliverables with
+[`combine_reviewed()`](https://MUHEG.github.io/CoReview/reference/combine_reviewed.md)
+once it’s done – see
+[`vignette("CoReview")`](https://MUHEG.github.io/CoReview/articles/CoReview.md)
+for details.)
+
 ## Installation
 
 You can install the development version of
@@ -18,12 +35,27 @@ remotes::install_github("MUHEG/CoReview")
 
 ## Run
 
-You can launch the application by running:
+Launch the app with a folder picker, so a reviewer can load any batch
+folder themselves:
 
 ``` r
 
 CoReview::run_app()
 ```
+
+Or point it straight at a batch, optionally pre-filling the reviewer
+name:
+
+``` r
+
+CoReview::run_app(batch_dir = "review_batches/batch_1", reviewer = "Jane Doe")
+```
+
+## Status
+
+This library is experimental and under active development as part of an
+ongoing systematic review project. It is not currently recommended for
+use beyond members of the development team.
 
 ## About
 
@@ -34,7 +66,7 @@ This README has been compiled on the
 ``` r
 
 Sys.time()
-#> [1] "2026-10-19 14:31:34 AEDT"
+#> [1] "2026-10-20 11:16:50 AEDT"
 ```
 
 Here are the tests results and package coverage:
@@ -44,12 +76,9 @@ Here are the tests results and package coverage:
 devtools::check(quiet = TRUE)
 #> ℹ Loading CoReview
 #> ── R CMD check results ──────────────────────────────── CoReview 0.0.0.9000 ────
-#> Duration: 57.3s
+#> Duration: 15.9s
 #> 
-#> ❯ checking for future file timestamps ... NOTE
-#>   unable to verify current time
-#> 
-#> 0 errors ✔ | 0 warnings ✔ | 1 note ✖
+#> 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 ```
 
 ``` r

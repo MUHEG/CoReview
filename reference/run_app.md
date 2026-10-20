@@ -48,5 +48,28 @@ run_app(
 
 - ...:
 
-  arguments to pass to golem_opts. See \`?golem::get_golem_options\` for
-  more details.
+  Arguments passed to golem_opts, retrieved inside the app via
+  \`golem::get_golem_options()\`. Two are recognised:
+
+  \`batch_dir\`
+
+  :   Path to a \`batch_N/\` folder (as written by
+      [`split_for_review`](https://MUHEG.github.io/CoReview/reference/split_for_review.md))
+      to open immediately. Without it, the app opens with a folder
+      picker instead.
+
+  \`reviewer\`
+
+  :   Reviewer name to pre-fill on save. Without it, the reviewer types
+      their own name in the app.
+
+  See \`?golem::get_golem_options\` for more details.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+run_app()
+run_app(batch_dir = "review_batches/batch_1", reviewer = "Jane Doe")
+} # }
+```

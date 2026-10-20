@@ -67,16 +67,76 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MUHEG/CoReview" class="external-link">CoReview</a></span><span class="op">)</span></span></code></pre></div>
-<p><strong>NOTE: The CoReview library is still in very early stages of
-development. Documentation to describe appropriate use of the library
-and its associated app will appear here at a later date.</strong></p>
+<p><a href="https://github.com/MUHEG/CoReview" class="external-link">CoReview</a> is a Shiny app for checking and correcting
+AI-generated data extraction and Drummond quality-appraisal results
+against the original source PDFs, as part of an AI-assisted health
+economic literature review.</p>
+<p>Reviewers work through papers one at a time: the source PDF sits
+alongside the AI’s extracted data, so every field and QA verdict can be
+checked and corrected at a glance.</p>
 <div class="section level2">
-<h2 id="launch-app">Launch app<a class="anchor" aria-label="anchor" href="#launch-app"></a>
+<h2 id="setting-up-a-review">Setting up a review<a class="anchor" aria-label="anchor" href="#setting-up-a-review"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Before reviewers start, the AI pipeline’s extraction and QA
+spreadsheets are split into one self-contained batch folder per reviewer
+with <code><a href="../reference/split_for_review.html">split_for_review()</a></code>. This is typically run once by
+whoever is coordinating the review, not something individual reviewers
+need to worry about. See <code><a href="../reference/split_for_review.html">?split_for_review</a></code> for details.</p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="reviewing-a-paper">Reviewing a paper<a class="anchor" aria-label="anchor" href="#reviewing-a-paper"></a>
+</h2>
+<p>Launch the app pointed at a batch folder:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/run_app.html">run_app</a></span><span class="op">(</span>batch_dir <span class="op">=</span> <span class="st">"review_batches/batch_1"</span>, reviewer <span class="op">=</span> <span class="st">"Jane Doe"</span><span class="op">)</span></span></code></pre></div>
+<p>(<code>batch_dir</code> and <code>reviewer</code> are both optional –
+without <code>batch_dir</code> the app opens with a folder picker
+instead, and <code>reviewer</code> just pre-fills the reviewer name on
+save.)</p>
+<p>The sidebar lists every paper in the batch; selecting one opens its
+PDF and AI-extracted data side by side.</p>
+<div class="section level3">
+<h3 id="extraction">Extraction<a class="anchor" aria-label="anchor" href="#extraction"></a>
+</h3>
+<p>Each field shows the AI’s extracted value, editable inline. A field a
+reviewer actually changes is tracked (and later highlighted in the
+exported deliverable) so it’s clear what was AI output versus
+human-corrected.</p>
+<p><img src="figures/app-extraction.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="quality-assessment">Quality Assessment<a class="anchor" aria-label="anchor" href="#quality-assessment"></a>
+</h3>
+<p>The Quality Assessment tab covers the Drummond checklist’s 33
+sub-items. Each has the AI’s verdict, editable, alongside its supporting
+evidence quote – display-only, since that’s the AI’s own justification
+for the verdict, not something a reviewer rewrites.</p>
+<p><img src="figures/app-qa.png" class="r-plt" alt="" width="100%"></p>
+</div>
+<div class="section level3">
+<h3 id="saving-and-moving-between-papers">Saving and moving between papers<a class="anchor" aria-label="anchor" href="#saving-and-moving-between-papers"></a>
+</h3>
+<p>“Save extraction &amp; continue” / “Save QA &amp; continue” record
+what’s changed and update the status badge and change counter for that
+section. Switching to a different paper – from the sidebar, or
+automatically after both sections of the current one are saved – always
+opens back on the Extraction tab.</p>
+<p>A reviewer can export their own batch at any point with the app’s
+“Export batch output” button, useful as a checkpoint partway through,
+without waiting for the whole batch to be finished:</p>
+<p><img src="figures/app-export.png" class="r-plt" alt="" width="35%"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="combining-all-batches">Combining all batches<a class="anchor" aria-label="anchor" href="#combining-all-batches"></a>
+</h2>
+<p>Once reviewing is done (or to check progress partway through),
+<code><a href="../reference/combine_reviewed.html">combine_reviewed()</a></code> merges every batch into the two final
+verified deliverables, with every reviewer-changed cell highlighted. See
+<code><a href="../reference/combine_reviewed.html">?combine_reviewed</a></code> for details.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
