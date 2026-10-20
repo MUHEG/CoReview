@@ -33,9 +33,24 @@ request to determine whether the \code{ui} should be used to handle the
 request. Note that the entire request path must match the regular
 expression in order for the match to be considered successful.}
 
-\item{...}{arguments to pass to golem_opts.
+\item{...}{Arguments passed to golem_opts, retrieved inside the app via
+`golem::get_golem_options()`. Two are recognised:
+\describe{
+  \item{`batch_dir`}{Path to a `batch_N/` folder (as written by
+    \code{\link{split_for_review}}) to open immediately. Without it,
+    the app opens with a folder picker instead.}
+  \item{`reviewer`}{Reviewer name to pre-fill on save. Without it,
+    the reviewer types their own name in the app.}
+}
 See `?golem::get_golem_options` for more details.}
 }
 \description{
 Run the Shiny Application
+}
+\examples{
+\dontrun{
+run_app()
+run_app(batch_dir = "review_batches/batch_1", reviewer = "Jane Doe")
+}
+
 }
