@@ -5,6 +5,7 @@ template:
   bootswatch: journal
 
 home:
+  title: "CoReview • An R package for human-verified AI literature review"
   links:
 development:
   mode: auto
