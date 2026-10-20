@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Mengmeng Wang (2026). CoReview: Streamline Human Checking and Updating of AI Data Extraction and Quality Appraisals for Health Economic Evaluation Literature Reviews. Version 0.0.0.9000. "
+authors:
+  - family-names: "Wang"
+    given-names: "Mengmeng"
+title: "CoReview: Streamline Human Checking and Updating of AI Data Extraction and Quality Appraisals for Health Economic Evaluation Literature Reviews"
+version: 0.0.0.9000
+doi: 10.5281/zenodo.23490200
+date-released: 2026-10-20
+url: "https://muheg.github.io/CoReview/"
