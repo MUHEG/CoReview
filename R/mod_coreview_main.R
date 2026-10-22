@@ -75,6 +75,8 @@ body { padding-bottom: 60px; }
 .sidebar-paper.pending .status-dot { background: #bbb; }
 .sidebar-paper.done { color: #1a7f37; }
 .sidebar-paper.partial { color: #8a6500; }
+.sidebar-paper.selected { background: #d0d0d0; font-weight: 600; }
+.sidebar-paper.selected:hover { background: #d0d0d0; }
 .change-counter { font-weight: 600; }
 .export-box { margin-top: 14px; padding: 10px; background: #eafaf0; border: 1px solid #a8dbb8; border-radius: 6px; }
 .export-box p { margin: 0 0 6px; font-weight: 600; color: #1a7f37; }
@@ -466,10 +468,12 @@ mod_CoReview_main_server <- function(
       output$paper_list <- renderUI({
         ids <- review_state$paper_ids
         statuses <- review_state$paper_statuses
+        current <- review_state$current_paper
 
         make_link <- function(i) {
           p <- ids[[i]]; st <- statuses[[i]]
           cls <- switch(st, completed = "done", partial = "partial", "pending")
+          if (identical(p, current)) cls <- paste(cls, "selected")
           actionLink(session$ns(paste0("goto_", make.names(p))),
                      tagList(span(class = "status-dot"), span(p)),
                      class = paste("sidebar-paper", cls))
