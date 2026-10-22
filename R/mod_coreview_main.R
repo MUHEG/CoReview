@@ -75,8 +75,8 @@ body { padding-bottom: 60px; }
 .sidebar-paper.pending .status-dot { background: #bbb; }
 .sidebar-paper.done { color: #1a7f37; }
 .sidebar-paper.partial { color: #8a6500; }
-.sidebar-paper.selected { background: #d0d0d0; font-weight: 600; }
-.sidebar-paper.selected:hover { background: #d0d0d0; }
+.sidebar-paper.selected { background: #e4e4e4; }
+.sidebar-paper.selected:hover { background: #e4e4e4; }
 .change-counter { font-weight: 600; }
 .export-box { margin-top: 14px; padding: 10px; background: #eafaf0; border: 1px solid #a8dbb8; border-radius: 6px; }
 .export-box p { margin: 0 0 6px; font-weight: 600; color: #1a7f37; }
