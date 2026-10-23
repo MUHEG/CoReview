@@ -62,6 +62,7 @@ body { padding-bottom: 60px; }
 .status-badge.pending { background: #f4f4f4; color: #888; }
 .save-section-btn { margin-top: 10px; }
 .pdf-toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.extraction-flags { margin-bottom: 6px; padding: 6px 10px; background: #fff8e6; border: 1px solid #f0d58c; border-radius: 4px; font-size: 0.88em; color: #6b5100; }
 #pdf_pane { width: 100%; height: 80vh; border: 1px solid #ccc; }
 .paper-group-title { font-size: 0.8em; text-transform: uppercase; color: #888; margin: 12px 0 4px; }
 .sidebar-paper {
@@ -503,12 +504,14 @@ mod_CoReview_main_server <- function(
         rec <- review_state$record; if (is.null(rec)) return(NULL)
         pdf_rel <- file.path("pdfs_", basename(rec$pdf_file %||% ""))
         doi <- trimws(rec$doi %||% "")
+        flags <- trimws(rec$extraction_flags %||% "")
         tagList(
           div(class = "pdf-toolbar",
               actionButton(session$ns("open_system_pdf_btn"), "Open in system PDF viewer", class = "btn-default btn-sm"),
               if (nzchar(doi)) tags$a(href = paste0("https://doi.org/", doi), target = "_blank", rel = "noopener",
                                        class = "btn btn-default btn-sm", "View DOI \u2197")
           ),
+          if (nzchar(flags)) div(class = "extraction-flags", tags$strong("AI flags: "), flags),
           tags$iframe(id = "pdf_pane", src = pdf_rel)
         )
       })

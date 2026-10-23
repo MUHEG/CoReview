@@ -1,9 +1,9 @@
 
 EXTRACTION_FIELDS <- c(
-  "Author_Year", "Country", "Population", "Type_of_EE", "Time_Horizon",
+  "Author_Year", "Country", "Population", "Diagnosis", "Type_of_EE", "Time_Horizon",
   "Perspective", "Study_Design_n", "Year_of_Pricing", "Discounting",
   "Cost_Components", "Consequence_Measures", "Intervention_Type",
-  "Comparator", "Results"
+  "Comparator", "Setting", "Results"
 )
 
 # Extraction fields are short (a phrase or short list) except these two,
